@@ -9,8 +9,15 @@
 
 <header>
   <h1>Datenpflege</h1>
-  <p>Bereich für Wissenschaftler:innen · <a th:href="@{/}">Zur öffentlichen Ansicht</a></p>
+  <p>
+    Angemeldet als <strong th:text="${benutzername}">Name</strong>
+    · <a th:href="@{/}">Zur öffentlichen Ansicht</a>
+  </p>
+  <form th:action="@{/logout}" method="post">
+    <button type="submit">Abmelden</button>
+  </form>
 </header>
+
 
 <main>
   <!-- Erfolgsmeldung nach dem Speichern -->

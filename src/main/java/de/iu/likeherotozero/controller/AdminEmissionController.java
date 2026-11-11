@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin/emissionen")   // alle Adressen dieser Klasse beginnen mit /admin/emissionen
@@ -22,7 +23,9 @@ public class AdminEmissionController {
 
     // Übersicht: /admin/emissionen?land=DEU
     @GetMapping
-    public String uebersicht(@RequestParam(name = "land", required = false) String isoCode, Model model) {
+    public String uebersicht(@RequestParam(name = "land", required = false) String isoCode,
+                             Principal principal, Model model) {
+        model.addAttribute("benutzername", principal.getName());   // wer ist angemeldet?
         model.addAttribute("laender", co2Service.alleLaender());
         if (isoCode != null && !isoCode.isBlank()) {
             co2Service.findeLand(isoCode).ifPresent(land -> {
@@ -32,6 +35,7 @@ public class AdminEmissionController {
         }
         return "admin/emissionen";
     }
+
 
     // Leeres Formular: /admin/emissionen/neu?land=DEU
     @GetMapping("/neu")
