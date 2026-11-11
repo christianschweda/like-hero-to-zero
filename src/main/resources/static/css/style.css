@@ -29,3 +29,5 @@ th { background: #f3f8f3; }
     padding: 0.4rem 0.8rem; border-radius: 4px; text-decoration: none; }
 .meldung { background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 0.5rem; }
 .fehler  { background: #fdecea; border-left: 4px solid #c62828; padding: 0.5rem; color: #c62828; }
+.feldfehler { color: #c62828; font-size: 0.85rem; margin-top: -0.2rem; }
+.feld-fehler { border: 2px solid #c62828; }

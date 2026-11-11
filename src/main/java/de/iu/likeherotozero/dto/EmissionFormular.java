@@ -1,13 +1,28 @@
 package de.iu.likeherotozero.dto;
 
 import de.iu.likeherotozero.model.Emission;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public class EmissionFormular {
 
     private Long id;              // leer = neuer Eintrag, gefüllt = Bearbeiten
+
+    @NotBlank(message = "Bitte ein Land auswählen.")
     private String landIsoCode;
-    private Integer jahr;         // Integer statt int: darf leer sein, wenn nichts eingegeben wurde
+
+    @NotNull(message = "Bitte ein Jahr angeben.")
+    @Min(value = 1750, message = "Das Jahr muss 1750 oder später sein.")
+    private Integer jahr;
+
+    @NotNull(message = "Bitte einen CO₂-Wert angeben.")
+    @PositiveOrZero(message = "Der CO₂-Wert darf nicht negativ sein.")
+    @Max(value = 100000, message = "Der Wert ist unplausibel hoch (maximal 100.000 Mio. t).")
     private Double co2Mt;
+
 
     // Formular mit den Werten eines vorhandenen Eintrags füllen (zum Bearbeiten)
     public static EmissionFormular aus(Emission emission) {

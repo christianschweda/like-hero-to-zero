@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import de.iu.likeherotozero.dto.EmissionFormular;
-
+import java.time.Year;
 
 @Service                          // Spring erzeugt automatisch ein Objekt (Bean) dieser Klasse
 @Transactional(readOnly = true)   // alle Methoden lesen nur, schreiben nichts
@@ -57,6 +57,9 @@ public class Co2Service {
 
         if (formular.getJahr() == null || formular.getCo2Mt() == null) {
             throw new IllegalArgumentException("Bitte Jahr und CO₂-Wert angeben.");
+        }
+        if (formular.getJahr() > Year.now().getValue()) {
+            throw new IllegalArgumentException("Das Jahr darf nicht in der Zukunft liegen.");
         }
 
         Land land = landRepository.findByIsoCode(formular.getLandIsoCode())

@@ -13,31 +13,35 @@
 </header>
 
 <main>
-    <!-- Fehlermeldung aus dem Service -->
+    <!-- Fehlermeldung aus dem Service (fachliche Prüfung) -->
     <p th:if="${fehler}" class="fehler" th:text="${fehler}">Fehler</p>
 
-    <form th:action="@{/admin/emissionen/speichern}" th:object="${formular}" method="post" class="formular">
+    <form th:action="@{/admin/emissionen/speichern}" th:object="${formular}" method="post" class="formular" >
 
-        <!-- versteckt: id des Eintrags (leer bei neuem Wert) -->
-        <input type="hidden" th:field="*{id}">
+    <input type="hidden" th:field="*{id}">
 
+        <!-- Land -->
         <label for="landIsoCode">Land</label>
-        <!-- Neuer Eintrag: Land auswählbar -->
-        <select th:if="*{id == null}" th:field="*{landIsoCode}" required>
+        <select th:if="*{id == null}" id="landIsoCode" th:field="*{landIsoCode}"
+                th:errorclass="feld-fehler" required>
             <option value="">Bitte wählen …</option>
             <option th:each="l : ${laender}" th:value="${l.isoCode}" th:text="${l.name}">Land</option>
         </select>
-        <!-- Bearbeiten: Land nur anzeigen, nicht änderbar -->
         <th:block th:if="*{id != null}">
             <strong th:each="l : ${laender}" th:if="${l.isoCode == formular.landIsoCode}" th:text="${l.name}">Land</strong>
             <input type="hidden" th:field="*{landIsoCode}">
         </th:block>
+        <span class="feldfehler" th:if="${#fields.hasErrors('landIsoCode')}" th:errors="*{landIsoCode}">Fehler</span>
 
+        <!-- Jahr -->
         <label for="jahr">Jahr</label>
-        <input type="number" th:field="*{jahr}" required>
+        <input type="number" id="jahr" th:field="*{jahr}" th:errorclass="feld-fehler" required>
+        <span class="feldfehler" th:if="${#fields.hasErrors('jahr')}" th:errors="*{jahr}">Fehler</span>
 
+        <!-- CO2-Wert -->
         <label for="co2Mt">CO₂-Ausstoß (Mio. Tonnen)</label>
-        <input type="number" step="any" min="0" th:field="*{co2Mt}" required>
+        <input type="number" step="any" min="0" id="co2Mt" th:field="*{co2Mt}" th:errorclass="feld-fehler" required>
+        <span class="feldfehler" th:if="${#fields.hasErrors('co2Mt')}" th:errors="*{co2Mt}">Fehler</span>
 
         <div class="knoepfe">
             <button type="submit">Speichern</button>

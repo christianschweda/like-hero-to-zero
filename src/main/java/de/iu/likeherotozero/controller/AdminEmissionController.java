@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 @Controller
 @RequestMapping("/admin/emissionen")   // alle Adressen dieser Klasse beginnen mit /admin/emissionen
@@ -55,17 +57,27 @@ public class AdminEmissionController {
 
     // Formular abschicken
     @PostMapping("/speichern")
-    public String speichern(@ModelAttribute("formular") EmissionFormular formular,
+    public String speichern(@Valid @ModelAttribute("formular") EmissionFormular formular,
+                            BindingResult bindingResult,
                             Model model, RedirectAttributes redirectAttributes) {
+
+        // 1. Verstößt eine Eingabe gegen die Regeln aus EmissionFormular?
+        if (bindingResult.hasErrors()) {
+            return zeigeFormular(formular, model);   // Formular mit Meldungen an den Feldern zeigen
+        }
+
+        // 2. Fachliche Prüfungen im Service (z. B. Duplikat, Jahr in der Zukunft)
         try {
             co2Service.speichern(formular);
         } catch (IllegalArgumentException e) {
             model.addAttribute("fehler", e.getMessage());
-            return zeigeFormular(formular, model);   // Formular mit Eingaben und Fehlermeldung erneut zeigen
+            return zeigeFormular(formular, model);
         }
+
         redirectAttributes.addFlashAttribute("meldung", "Der Wert wurde gespeichert.");
         return "redirect:/admin/emissionen?land=" + formular.getLandIsoCode();
     }
+
 
     // Hilfsmethode: Formularseite vorbereiten
     private String zeigeFormular(EmissionFormular formular, Model model) {
