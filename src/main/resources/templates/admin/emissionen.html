@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Datenpflege · Like Hero To Zero</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header>
+  <h1>Datenpflege</h1>
+  <p>Bereich für Wissenschaftler:innen · <a th:href="@{/}">Zur öffentlichen Ansicht</a></p>
+</header>
+
+<main>
+  <!-- Erfolgsmeldung nach dem Speichern -->
+  <p th:if="${meldung}" class="meldung" th:text="${meldung}">Gespeichert.</p>
+
+  <!-- Land wählen -->
+  <form th:action="@{/admin/emissionen}" method="get" class="auswahl">
+    <label for="land">Land:</label>
+    <select id="land" name="land" required>
+      <option value="">Bitte wählen …</option>
+      <option th:each="l : ${laender}"
+              th:value="${l.isoCode}"
+              th:text="${l.name}"
+              th:selected="${ausgewaehltesLand != null and l.isoCode == ausgewaehltesLand.isoCode}">
+        Land
+      </option>
+    </select>
+    <button type="submit">Anzeigen</button>
+  </form>
+
+  <!-- Knopf für neuen Eintrag -->
+  <p>
+    <a class="button-link"
+       th:href="${ausgewaehltesLand != null} ? @{/admin/emissionen/neu(land=${ausgewaehltesLand.isoCode})} : @{/admin/emissionen/neu}">
+      + Neuen Wert eintragen
+    </a>
+  </p>
+
+  <!-- Tabelle mit allen Werten des Landes -->
+  <section th:if="${emissionen != null}">
+    <h2 th:text="${ausgewaehltesLand.name}">Land</h2>
+    <table>
+      <thead>
+      <tr>
+        <th>Jahr</th>
+        <th>CO₂ (Mio. t)</th>
+        <th>Quelle</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="e : ${emissionen}">
+        <td th:text="${e.jahr}">2024</td>
+        <td th:text="${#numbers.formatDecimal(e.co2Mt, 1, 'POINT', 2, 'COMMA')}">0,00</td>
+        <td th:text="${e.quelle}">Quelle</td>
+        <td><a th:href="@{/admin/emissionen/{id}/bearbeiten(id=${e.id})}">Bearbeiten</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+
+</body>
+</html>

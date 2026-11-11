@@ -12,4 +12,6 @@ public interface EmissionRepository extends JpaRepository<Emission, Long> {
     Optional<Emission> findFirstByLandOrderByJahrDesc(Land land);  // neuester Wert eines Landes
 
     List<Emission> findByLandOrderByJahrDesc(Land land);           // alle Werte, neueste zuerst
+
+    Optional<Emission> findByLandAndJahr(Land land, int jahr);   // gibt es diesen Wert schon?
 }

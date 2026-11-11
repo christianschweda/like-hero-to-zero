@@ -17,3 +17,15 @@ button { background: #2e7d32; color: white; border: none; border-radius: 4px; cu
 .wert { font-size: 2rem; margin: 0.5rem 0; }
 .quelle, footer { font-size: 0.85rem; color: #777; }
 footer { margin-top: 3rem; border-top: 1px solid #ddd; padding-top: 0.5rem; }
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+th, td { text-align: left; padding: 0.4rem; border-bottom: 1px solid #ddd; }
+th { background: #f3f8f3; }
+
+.formular { display: grid; gap: 0.4rem; max-width: 360px; }
+.formular input, .formular select { font-size: 1rem; padding: 0.4rem; }
+.knoepfe { display: flex; gap: 1rem; align-items: center; margin-top: 1rem; }
+
+.button-link { display: inline-block; background: #2e7d32; color: white;
+    padding: 0.4rem 0.8rem; border-radius: 4px; text-decoration: none; }
+.meldung { background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 0.5rem; }
+.fehler  { background: #fdecea; border-left: 4px solid #c62828; padding: 0.5rem; color: #c62828; }
