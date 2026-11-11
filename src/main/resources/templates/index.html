@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Like Hero To Zero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header>
+    <h1>Like Hero To Zero</h1>
+    <p>CO₂-Emissionen weltweit, öffentlich und transparent</p>
+</header>
+
+<main>
+    <!-- Auswahlformular: schickt das gewählte Land als ?land=XYZ an "/" -->
+    <form th:action="@{/}" method="get" class="auswahl">
+        <label for="land">Land auswählen:</label>
+        <select id="land" name="land" required>
+            <option value="">Bitte wählen …</option>
+            <option th:each="l : ${laender}"
+                    th:value="${l.isoCode}"
+                    th:text="${l.name}"
+                    th:selected="${ausgewaehltesLand != null and l.isoCode == ausgewaehltesLand.isoCode}">
+                Land
+            </option>
+        </select>
+        <button type="submit">Anzeigen</button>
+    </form>
+
+    <!-- Ergebnis: nur sichtbar, wenn ein Wert gefunden wurde -->
+    <section th:if="${emission != null}" class="ergebnis">
+        <h2 th:text="${ausgewaehltesLand.name}">Land</h2>
+        <p class="wert">
+            <span th:text="${#numbers.formatDecimal(emission.co2Mt, 1, 'POINT', 2, 'COMMA')}">0,00</span>
+            Mio. Tonnen CO₂
+        </p>
+        <p>im Jahr <strong th:text="${emission.jahr}">2024</strong> (aktuellster verfügbarer Wert)</p>
+        <p class="quelle">Quelle: <span th:text="${emission.quelle}">Quelle</span></p>
+    </section>
+
+    <!-- Hinweis, falls ein Land ohne Daten gewählt wurde -->
+    <p th:if="${ausgewaehltesLand != null and emission == null}">
+        Für dieses Land liegen keine Daten vor.
+    </p>
+</main>
+
+<footer>
+    Datenquelle: Our World in Data, CO₂ and Greenhouse Gas Emissions (CC BY 4.0)
+</footer>
+
+</body>
+</html>
